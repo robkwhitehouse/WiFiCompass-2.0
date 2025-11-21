@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" charset='utf-8'>
+<style>
+  body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* Style the popups */
+.myPopup {
+  text-align:center;
+  padding:40px;
+  background-color:lightblue;
+  font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+</style>
+<title>WiFi Compass Calibration</title>
+</head>
+
+<body>
+
+<h1 style="color:blue;text-align:center">WiFi-Compass Calibration and Alignment</h1>
+<div class="tab">
+  <button id="homebutton" class="tablinks" onclick="openTab(event,'homeTab')">Home</button>
+  <button class="tablinks" onclick="openTab(event,'boatTab')">Boat Alignment</button>
+  <button class="tablinks" onclick="openTab(event,'sensorTab')">Sensor Calibration</button>
+  
+</div>
+
+<! HOME TAB>
+
+<div id="homeTab" class="tabcontent">
+<p> Calibration and alignment of the WiFi compass sender unit needs to be performed whenever the unit is installed in a new location or boat. It normally only needs to be performed once but it  can be repeated if necessary e.g. if the sensor unit headings do not match the boat compass headings. </p>
+<p>It is a two stage process;</p>
+<ol>
+<li> Calibration of the internal sensor devices - Gyroscope, Accelerometer and Magnetometer. This will have been done before the unit is shipped and <b>should not normally need to be done again.</b>
+<It can be done again, and may improve accuracy, if required. It needs to be performed when the boat is level and stationary. It is best done with the boat tied-up alongside a pontoon. </li>
+<li> Alignment of the sensor unit with the boat compass. The sensor unit can be installed in any orientation. This step generates a set of offsets that are added to the sensor unit output such that the headings are aligned to the boat steering compass. This is equivalent to "carding" the compass. This step needs to be performed when the boat is underway and has space to navigate in all directions. </li> 
+</ol>
+<p><b> It is essential that the sender unit is installed well away (at least 2m) from any large lumps of iron - e.g. engines and keels</b> </p>
+<p>Use the tabs above to navigate to the steps 1 & 2</p>
+</div>
+
+<! BOAT TAB >
+
+<div id="boatTab" class="tabcontent">
+<style>
+.stage{
+    width:400px;
+    height:400px;
+    margin:2em;
+    float:left;
+    position:relative;
+    background:#ccc;
+    overflow:hidden;
+    font-weight:bold;
+    text-align:center;
+}
+</style>
+
+<table>
+<tr>
+<td>
+<table style="border: 1px solid black; border-collapse: collapse; border-spacing: 10px; padding: 10px;">
+<th colspan="3" style="text-align:center;border: 1px solid black">
+<button onclick=startButton()  style="font-size: 20px;">Start</button>
+</th>
+<tr>
+<td> Heading </td>
+<td> Sensor </td>
+<td> Offset </td>
+<tr>
+<td> <button id="northButton" disabled class="headingButton" onclick=northButton()>NORTH 000</button></td>
+<td id="sensorNorth" style="text-align:center; border-style:inset; background-color:#C0FFC0">   </td>
+<td id="northOffset" style="text-align:center; border-style:inset; background-color:#C0FFC0">  </td>
+</tr>
+<tr>
+<td> <button id="eastButton" disabled class="headingButton" onclick=eastButton()>EAST    090</button></td>
+<td id="sensorEast" style="padding:10px; border-style:inset; background-color:#C0FFC0">   </td>
+<td id="eastOffset" style="padding:10px; border-style:inset; background-color:#C0FFC0">  </td>
+</tr>
+<tr>
+<td> <button id="southButton" disabled class="headingButton" onclick=southButton()>SOUTH 180</button></td>
+<td id="sensorSouth" style="padding:10px; border-style:inset; background-color:#C0FFC0">   </td>
+<td id="southOffset" style="padding:10px; border-style:inset; background-color:#C0FFC0">  </td>
+</tr>
+<tr>
+<td> <button id="westButton" disabled class="headingButton" onclick=westButton()>WEST  270</button></td>
+<td id="sensorWest" style="padding:10px; border-style:inset; background-color:#C0FFC0">   </td>
+<td id="westOffset" style="padding:10px; border-style:inset; background-color:#C0FFC0">  </td>
+</tr>
+
+</table>
+</td>
+<td>
+<div style="padding:20px"> 
+<p>Steer the boat in each of the 4 cardinal directions, using the main boat steering compass. It is probably better to do this under engine power, if possible. </p>
+<p>Click "Start" to enable the heading buttons. When you have entered all 4 headings, the buttons to generate and save the compass card will be enabled.</p>
+<p>When you are happy that the boat heading is steady and exactly correct, click on the appropriate button opposite</p>
+<p>You can repeat each heading as often as necessary to be confident that you have achieved good alignment.</p>
+<p>All 4 of the offsets (left) should be fairly similar (+/- 5deg). If they differ by more that a few degrees then you should repeat the calibration procedure. Including, if necessary, the sensor calibration. </p>
+<p>A small variation in the offsets is normal and inevitable. There is no need to aim for perfection!</p>
+<p>When you have done all 4 cardinal headings, you can click on "Generate compass card" below. This will enable the audio compass output to facilitate testing/checking the compass card</p>
+<p>If you have good alignment between the Audio Compass and the boat compass, click on "Save compass card" below. This will ensure that the same compass card is reloaded in the future.</p>
+<p>Click on Zero Compass Card to reset the compass card offsets to zero. (Then click Save Card to persist changes).</p>
+</div>
+</td>
+</tr>
+<tr>
+<td id="responseDisplay" style="padding:10px; border-style:inset; background-color:#C0FFC0">     </td>
+<td style="padding:10px">
+<button id="getHeading" onclick=getHeading()>Get Current Heading</button>
+<button id="generateCard" disabled onclick=generateCard()>Generate Compass Card</button>
+<button id="saveCard" disabled onclick=saveCard()>Save Compass Card</button>
+<button id="zeroCard" onclick=zeroCard()>Zero Compass Card</button>
+</td>
+</tr>
+</table> 
+</div>
+
+<!SENSOR TAB>
+
+<div id="sensorTab" class="tabcontent">	
+	<p> The compass internal sensor unit is supplied pre-calibrated and further calibration should not normally  be required. </p>
+    <p>	Calibration will require some small movements of the sender unit and these should be performed with the unit as close as possible to its new operating position. </p>
+	<p> This procedure should be performed with the boat stationary and level. </p>
+	<p> The ideal is to get all calibration readings up to level 3 (=fully calibrated). However there is currently a bug in the sensor unit which prevents accurate reporting of the Gyro calibration. It is still important to run through the gyro calibration procedure, but don't expect to see a sensible status reading until the bug is fixed. This will not affect the compass sensor unit performance.</p>
+    <p> As a bare minimum, the accelerometer needs to be level 1 or 2, and the magnetometer should be at least level 2 and "System" should be 3.</p>
+	<p> It may require several repeats to improve calibration levels. Patience! </p>
+	<p> Click each of the 3 "Calibrate ..." buttons below in turn and perform the actions described. </p>
+	<p> When the desired calibration has been reached, click on "Save Calibration".  </p>
+	<p> The "Restore Factory Defaults" button should only be used as a last resort. It may require many repetitions of the calibration procedure to re-establish good calibration levels. </p>
+	<hr/>
+	<table style="margin-left:auto;margin-right:auto;text-align:center;padding:20px">
+	<tr>
+	<th></th>
+	<th>Gyroscope</th>
+	<th>Accelerometer</th>
+	<th>Magnetometer</th>
+	<th>System</th>
+	</tr>
+	<tr>
+	<td>Current Status:  </td>
+	<td id="gyrostat" style="border-style:inset; background-color:#C0FFC0">0</td>
+	<td id="accelstat" style="border-style:inset; background-color:#C0FFC0">0</td>
+	<td id="magstat" style="border-style:inset; background-color:#C0FFC0">0</td>
+	<td id="sysstat" style="border-style:inset; background-color:#C0FFC0">0</td>
+	</tr>
+	<tr>
+	<td></td>
+	<td><button popovertarget="gyroCal" onclick="enableGyroCalib()"> Calibrate Gyro </button></td>
+	<td><button popovertarget="accelCal" onclick="enableAccelCalib()"> Calibrate Accelerometer </button></td>
+	<td><button popovertarget="magCal" onclick="enableMagCalib()"> Calibrate Magnetometer </button>	</td>
+	</tr>
+	</table >
+	<hr/>
+	<table style="margin-left:auto;margin-right:auto;text-align:center;padding:20px">
+	<td><button onclick="getCalStatus()"> Refresh<br> data</button></td>
+	<td><button id="saveButton" style="color:green" disabled onclick="saveCalib()">Save<br> Calibration </button></td>
+	<td><button onclick="restoreDefaults()"> Restore factory <br>defaults </button></td>
+	
+	</table>
+	
+	
+	<div popover id="gyroCal" class=myPopup>
+	  <h2>Gyro Calibration</h2>
+      <hr>
+      <p>Place the compass unit in its working position and keep</p>
+      <p>stationary for 10 seconds. Click Close when done.</p>
+     <button popovertarget="gyroCal" popovertargetaction="hide" onclick="disableCalib()">Close</button>
+	</div>
+	
+
+	<div popover id="accelCal" class=myPopup>
+	  <h2>Accelerometer Calibration</h2>
+      <hr>
+      <p>Rotate the sensor unit through all 3 axes (one axis at a time). As each of the 6 faces of the unit becomes horizontal, hold it steady in this position for 5 seconds.</p>
+      <p>Click Close when done.</p>
+      <button popovertarget="accelCal" popovertargetaction="hide" onclick="disableCalib()">Close</button>
+	</div>
+	
+	
+	<div popover id="magCal" class=myPopup>
+	  <h2>Magnetometer Calibration</h2>
+      <hr>
+      <p>Keeping the unit flat, slowly spin it around in a complete circle and then slowly spin it back the other way.</p>
+      <p>Click Close when done.</p>
+      <button popovertarget="magCal" popovertargetaction="hide" onclick="disableCalib()">Close</button>
+	</div>
+  </div>
+ </body>
+  
+<script>
+
+document.getElementById("homebutton").click();
+
+async function disableCalib() {
+  let response = await fetch("http://192.168.4.1/disableCal");
+  let resJSON = await response.json();
+  getCalStatus();
+}
+
+async function enableGyroCalib() {
+  let response = await fetch("http://192.168.4.1/enableGyroCal");
+  let resJSON = await response.json();
+  getCalStatus();
+  document.getElementById("saveButton").disabled = false; 
+  document.getElementById("saveButton").style.color = "red";
+  
+}
+
+async function enableAccelCalib() {
+  let response = await fetch("http://192.168.4.1/enableAccelCal");
+  let resJSON = await response.json();
+  getCalStatus();
+  document.getElementById("saveButton").disabled = false; 
+  document.getElementById("saveButton").style.color = "red";
+}
+async function enableMagCalib()   {
+  document.getElementById("saveButton").disabled = false;
+  let response = await fetch("http://192.168.4.1/enableMagCal");
+  let resJSON = await response.json();
+  getCalStatus();
+  document.getElementById("saveButton").disabled = false;
+  document.getElementById("saveButton").style.color = "red";  
+}
+
+async function saveCalib() {
+  let response = await fetch("http://192.168.4.1/saveCal");
+  let resJSON = await response.json();
+  getCalStatus(); 
+  document.getElementById("saveButton").disabled = true;
+  document.getElementById("saveButton").style.color = "green";  
+}
+
+async function getCalStatus() {
+  let calStatus = await fetch("http://192.168.4.1/getCalStatus");
+  let cal = await calStatus.json();
+  document.getElementById("sysstat").innerHTML = cal.sysStatus;
+  document.getElementById("gyrostat").innerHTML = cal.gyroStatus;
+  document.getElementById("accelstat").innerHTML = cal.accelStatus;
+  document.getElementById("magstat").innerHTML = cal.magStatus;
+}
+
+
+//Boat alignment buttons
+
+var gotNorth, gotEast, gotSouth, gotWest; //Booleans
+var north, east, south, west; //Integers to hold sensor headings
+
+function startButton() {
+
+  const buttons = document.getElementsByClassName("headingButton");
+  for (button=0; button<buttons.length; button++) { buttons[button].disabled = false; }
+  document.getElementById("generateCard").disabled=true;
+  document.getElementById("saveCard").disabled=true;
+}
+
+async function northButton() {
+  let response = await fetch("http://192.168.4.1/getHeading");
+  let resJSON = await response.json();
+  const button = document.getElementById("northButton");
+  const sensorDisplay = document.getElementById("sensorNorth");
+  const offsetDisplay = document.getElementById("northOffset");
+  button.style.color = "green";
+  north = resJSON.sensorHeading;
+  sensorDisplay.innerHTML = north;
+  offsetDisplay.innerHTML = north;
+  gotNorth = true;
+  if (gotNorth && gotEast && gotSouth && gotWest) document.getElementById("generateCard").disabled=false
+}
+async function eastButton() {
+  let response = await fetch("http://192.168.4.1/getHeading");
+  let resJSON = await response.json();
+  const button = document.getElementById("eastButton");
+  const sensorDisplay = document.getElementById("sensorEast");
+  const offsetDisplay = document.getElementById("eastOffset");
+  button.style.color = "green";
+  east = resJSON.sensorHeading;
+  sensorDisplay.innerHTML = east;
+  offsetDisplay.innerHTML = east-090;
+  gotEast = true;
+  if (gotNorth && gotEast && gotSouth && gotWest) document.getElementById("generateCard").disabled=false;
+}
+async function southButton() {
+  let response = await fetch("http://192.168.4.1/getHeading");
+  let resJSON = await response.json();
+  const button = document.getElementById("southButton");
+  const sensorDisplay = document.getElementById("sensorSouth");
+  const offsetDisplay = document.getElementById("southOffset");
+  button.style.color = "green";
+  south = resJSON.sensorHeading;
+  sensorDisplay.innerHTML = south;
+  offsetDisplay.innerHTML = south-180;
+  gotSouth = true;
+  if (gotNorth && gotEast && gotSouth && gotWest) document.getElementById("generateCard").disabled=false;
+}
+async function westButton() {
+  let response = await fetch("http://192.168.4.1/getHeading");
+  let resJSON = await response.json();
+  const button = document.getElementById("westButton");
+  const sensorDisplay = document.getElementById("sensorWest");
+  const offsetDisplay = document.getElementById("westOffset");
+  button.style.color = "green";
+  west = resJSON.sensorHeading;
+  sensorDisplay.innerHTML = west;
+  offsetDisplay.innerHTML = west-270;
+  gotWest = true;
+  if (gotNorth && gotEast && gotSouth && gotWest) document.getElementById("generateCard").disabled=false;
+}
+
+async function getHeading() {
+  let response = await fetch("http://192.168.4.1/getHeading");
+  let resJSON = await response.json();
+  if ( resJSON.result === "OK" ) 
+    document.getElementById("responseDisplay").innerHTML = "Boat Heading: " + resJSON.boatHeading;
+  else
+    document.getElementById("responseDisplay").innerHTML = "Get Heading Failed";
+}
+async function saveCard() {
+  let response = await fetch("http://192.168.4.1/saveCard");
+  let resJSON = await response.json();
+  if ( resJSON.result === "OK" ) {
+    document.getElementById("responseDisplay").innerHTML = "Card saved";
+	document.getElementById("saveCard").disabled = true;
+  }
+  else
+    document.getElementById("responseDisplay").innerHTML = "Save failed";
+}
+
+async function zeroCard() {
+  let response = await fetch("http://192.168.4.1/resetCard");
+  let resJSON = await response.json();
+  if ( resJSON.result === "OK" ) {
+    document.getElementById("responseDisplay").innerHTML = "Card reset";
+	document.getElementById("saveCard").disabled = false;
+  }
+  else
+    document.getElementById("responseDisplay").innerHTML = "Reset failed";
+}
+
+async function generateCard() {
+  let URL = "http://192.168.4.1/generateCard?north=" + north + "&east=" + east + "&south=" + south + "&west=" + west;
+  let response = await fetch(URL);
+  let resJSON = await response.json();
+  if ( resJSON.result === "OK" ) {
+    document.getElementById("responseDisplay").innerHTML = "Card Generated";
+	document.getElementById("saveCard").disabled = false;
+  } 
+  else
+    document.getElementById("responseDisplay").innerHTML = "Save Failed";
+}
+
+async function restoreDefaults() {
+  let response = await fetch("http://192.168.4.1/resetCal");
+  let resJSON = await response.json();
+  getCalStatus();
+}
+
+function openTab(evt, tabName) {
+
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+document.getElementById("homebutton").click();
+  </script>
+</html>
+
