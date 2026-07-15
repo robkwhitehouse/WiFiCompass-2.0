@@ -11,7 +11,8 @@
 #include "Cmps14.h"
 #define _i2cAddress         0x60
 #define calibrationQuality  0x1E
-#endif
+
+#endif //The rest is independent of IMU hardware
 
 #define MOD360(x) (((x)%360 + 360) % 360)
 
@@ -255,10 +256,10 @@ void printMenu() {
 }
 
 /*
- * generate a "compass card" for the CMPS14
- * Allows the CMPS to be mounted in any orientation
- * Generates a mapping table, mapping readings from the CMPS into 
- * real world magnetic compass bearings
+ * generate a "compass card" for the IMU
+ * Allows the IMU to be mounted in any orientation
+ * Generates a mapping table, mapping readings from the IMU into 
+ * bearings that aligned to the boat main steering compass bearings
  */
 
 //procedure to create the compass card
@@ -439,7 +440,7 @@ void configureDynamicCalib(bool enable) {
 
   uint8_t config;
   if (enable) config = SH2_CAL_GYRO || SH2_CAL_ACCEL || SH2_CAL_MAG;
-  else config = 0x00;
+  else config = 0x00; //disable dynamic calib
 
   //configure dynamic calibration
   if (myIMU.setCalibrationConfig(config) != true)  // configure all three sensors
@@ -497,7 +498,12 @@ void saveCalibration() {
   if (myIMU.saveCalibration() != true) 
     Serial.println(F("Calibration data was not saved"));
   else
-    printTerm("Calibration profile saved\n");
+    Serial.println(F("Calibration profile saved\n"));
+}
+
+
+void saveCalibOffsetsToFlash(){
+  settings.putBytes("sensorOffsets",&calibData,sizeof(calibData));
 }
 
 void getCalConfig(){
@@ -655,6 +661,6 @@ void saveCalibration() {
   // Update the User
   printTerm("Calibration profile saved\n");
 }
-#endif
+#endif //CMPS14
 
 #endif _CALIB_H

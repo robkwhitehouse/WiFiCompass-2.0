@@ -450,7 +450,10 @@ void handleResetCalibration()
 void handleSaveCalibration()
 {
   Serial.println("HandleSaveCalibration() Called");
-  saveCalibration();  
+  saveCalibration();  //Copies sensor offsets to internal IMU RAM
+  readIMUsensorOffsets();  //read these offsets into a local (MCU) array
+  saveCalibOffsetsToFlash(); //save them out to flash
+
 
   // Set content type of the resp
   webServer.sendHeader("Access-Control-Allow-Origin", "*");

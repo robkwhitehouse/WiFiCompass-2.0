@@ -33,83 +33,78 @@ BNO08x myIMU;
 #define BNO08X_RST  4
 //#define BNO08X_RST  -1
 
+
 #define BNO08X_ADDR 0x4B  
+#define CALIB_DATA_START 0x55  // Starting register for calibration offsets data
+#define CALIB_DATA_LENGTH 22   // Length of calibration offsets data block
 
+uint8_t calibData[CALIB_DATA_LENGTH];
 
-  struct CMPS14_calibration {
-    unsigned int sys : 2;
-    unsigned int gyro : 2;
-    unsigned int accel : 2;
-    unsigned int mag : 2;
-  };
+struct CMPS14_calibration {
+  unsigned int sys : 2;
+  unsigned int gyro : 2;
+  unsigned int accel : 2;
+  unsigned int mag : 2;
+};
 
-  byte _byteHigh;
-  byte _byteLow;
+byte _byteHigh;
+byte _byteLow;
 
 extern volatile  int bearing, pitch, roll;
 
+//Get current sensor offsets 
+void readIMUsensorOffsets() { 
+
+  Wire.beginTransmission(BNO08X_ADDR);
+  Wire.write(CALIB_DATA_START);
+  Wire.endTransmission(false); // Send restart condition
+  Wire.requestFrom(BNO08X_ADDR, CALIB_DATA_LENGTH);
+
+  for (int i = 0; i < CALIB_DATA_LENGTH; i++) {
+    if (Wire.available()) {
+      calibData[i] = Wire.read();
+    }
+  }
+}
+
+//send locally saved calibration offsets back to IMU
+void writeIMUsensorOffsets() { 
+  Wire.beginTransmission(BNO08X_ADDR);
+  Wire.write(CALIB_DATA_START);
+
+  for (int i = 0; i < CALIB_DATA_LENGTH; i++) {
+    Wire.write(calibData[i]);
+  }
+  Wire.endTransmission();
+}
+
+
   // Here is where you define the sensor outputs you want to receive
+#define REPORT_FREQ 50 //(milliseconds)
 void setReports(void) {
   Serial.println("Setting desired reports");
-  if (myIMU.enableGeomagneticRotationVector() == true) {
+  if (myIMU.enableGeomagneticRotationVector(REPORT_FREQ) == true) {
     Serial.println(F("Geomagnetic rotation vector enabled"));
   } else {
-    Serial.println("Could not enable rotation vector");
+    Serial.println(F("Could not enable rotation vector"));
   }
-  if (myIMU.enableMagnetometer(1) == true) {
+  if (myIMU.enableMagnetometer(REPORT_FREQ) == true) {
     Serial.println(F("Magnetometer enabled"));
   } else {
-    Serial.println("Could not enable magnetometer");
+    Serial.println(F("Could not enable magnetometer"));
   }
   //enable gyroscope report
-  if (myIMU.enableGyro(1) == true) {
+  if (myIMU.enableGyro(REPORT_FREQ) == true) {
     Serial.println(F("Gyroscope enabled"));
   } else {
-    Serial.println("Could not enable gyroscope");
+    Serial.println(F("Could not enable gyroscope"));
   }
   //enable accelerometer report
-  if (myIMU.enableAccelerometer(1) == true) {
+  if (myIMU.enableAccelerometer(REPORT_FREQ) == true) {
     Serial.println(F("Accelerometer enabled"));
   } else {
-    Serial.println("Could not enable accelerometer");
+    Serial.println(F("Could not enable accelerometer"));
   }
 }
 
-/*
-  float magnetX = 0;
-  float magnetY = 0;
-  float magnetZ = 0;
-
-  float accelX = 0;
-  float accelY = 0;
-  float accelZ = 0;
-  // The acceleration along the X-axis, presented in mg 
-  // See BNO080_Datasheet_v1.3 page 21
-  float accelScale = 9.80592991914f/1000.f; // 1 m/s^2
-  
-  float gyroX = 0;
-  float gyroY = 0;
-  float gyroZ = 0;
-  // 16bit signed integer 32,768
-  // Max 2000 degrees per second - page 6
-  float gyroScale = 1.0f/16.f; // 1 Dps
-*/
-
-/*
-int16_t getBearing()
-{
-
-  return bearing;
-}
-
-int getRoll()
-{
-   return roll;
-}
-
-int getPitch()
-{
-   return pitch;
-}
-*/
- #endif
+ #endif _BNO085_H
