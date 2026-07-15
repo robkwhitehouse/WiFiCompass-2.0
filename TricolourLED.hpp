@@ -14,8 +14,8 @@
 class TricolourLED; //Forward declaration
 
 //Used by the blinker method
-#define BLINK_PERIOD 3000 //- 3seconds
-#define DUTY_CYCLE 20 // - 20% ON, 80% OFF
+#define BLINK_PERIOD 5000 //- 5seconds
+#define DUTY_CYCLE 2 // - 2% ON, 98% OFF
 
 
 class TricolourLED {
